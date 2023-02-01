@@ -42,17 +42,17 @@ export default function Nav({ openNav, onCloseNav }) {
   const [space, setspace] = useState(' ')
   const isDesktop = useResponsive('up', 'lg');
 
-  const fetchData = async () => {
-    const resp = await fetch("https://dorm-api.vercel.app/api/user/1");
-    const data = await resp.json()
-    setName(data[0].name)
-    setlastName(data[0].lastName)
-    setRole(data[0].role)
-  };
+  // const fetchData = async () => {
+  //   const resp = await fetch("https://dorm-api.vercel.app/api/user/1");
+  //   const data = await resp.json()
+  //   setName(data[0].name)
+  //   setlastName(data[0].lastName)
+  //   setRole(data[0].role)
+  // };
 
-  useEffect(()=>{
-    fetchData()
-  }, [])
+  // useEffect(()=>{
+  //   fetchData()
+  // }, [])
 
   useEffect(() => {
     if (openNav) {
