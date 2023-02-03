@@ -99,11 +99,12 @@ export default function BlogPage() {
           <TextField
             autoFocus
             margin="dense"
-            id="name"
+            id="outlined-multiline-static"
             label="เนื้อหาโพสต์"
-            type="email"
+            multiline
+            rows={4}
+            // defaultValue="Default Value"
             fullWidth
-            variant="standard"
           />
         </DialogContent>
         <DialogActions>
