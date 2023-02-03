@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 // @mui
-import { Grid, Button, Container, Stack, Typography } from '@mui/material';
+import { Grid, Button, Container, Stack, Typography,
+   Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 // components
 import Iconify from '../components/iconify';
 import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../sections/@dashboard/blog';
@@ -23,6 +24,15 @@ const SORT_OPTIONS = [
 export default function BlogPage() {
 
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false)
+
+  const handleClickOpen = () =>{
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
 
   const handleClick = async () => {
     console.log(new Date().toISOString());
@@ -66,10 +76,33 @@ export default function BlogPage() {
           <Typography variant="h4" gutterBottom>
             Blog
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleClick}>
+          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleClickOpen}>
             New Post
           </Button>
         </Stack>
+
+        <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Subscribe</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            To subscribe to this website, please enter your email address here. We
+            will send updates occasionally.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Email Address"
+            type="email"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>Subscribe</Button>
+        </DialogActions>
+        </Dialog>
 
         <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
           <BlogPostsSearch posts={POSTS} />
