@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 // @mui
-import { Grid, Button, Container, Stack, Typography,
+import { Grid, Button, Container, Stack, Typography, TextField,
    Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 // components
 import Iconify from '../components/iconify';
@@ -82,25 +82,33 @@ export default function BlogPage() {
         </Stack>
 
         <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Subscribe</DialogTitle>
+        <DialogTitle>เพิ่มโพสต์</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
+            เพิ่มเนื้อหาโพสต์ ลงในcontent
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Email Address"
+            label="หัวข้อโพสต์"
+            type="email"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="เนื้อหาโพสต์"
             type="email"
             fullWidth
             variant="standard"
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Subscribe</Button>
+          <Button onClick={handleClose}>ยกเลิก</Button>
+          <Button onClick={handleClose}>โพสต์</Button>
         </DialogActions>
         </Dialog>
 
