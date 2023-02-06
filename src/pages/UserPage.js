@@ -21,6 +21,12 @@ import {
   IconButton,
   TableContainer,
   TablePagination,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent, 
+  DialogContentText, 
+  DialogTitle
 } from '@mui/material';
 // components
 import Label from '../components/label';
@@ -34,8 +40,9 @@ import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
+  { id: 'name', label: 'ชื่อผู้เช่า', alignRight: false },
+  { id: 'property', label: 'ตึก', alignRight: false },
+  { id: 'room', label: 'ห้อง', alignRight: false },
   { id: 'role', label: 'Role', alignRight: false },
   { id: 'isVerified', label: 'Verified', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
@@ -87,6 +94,16 @@ export default function UserPage() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const [openCreate, setOpenCreate] = useState(false)
+
+  const handleClickOpen = () =>{
+    setOpenCreate(true)
+  }
+
+  const handleClose = () => {
+    setOpenCreate(false)
+  }
 
   const [loading, setLoading] = useState(false)
 
@@ -181,10 +198,42 @@ export default function UserPage() {
           <Typography variant="h4" gutterBottom>
             ผู้เช่า
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick ={handleClickOpen}>
             เพิ่มผู้เช่าใหม่
           </Button>
         </Stack>
+
+        <Dialog open={openCreate} onClose={handleClose}>
+        <DialogTitle>เพิ่มโพสต์</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            เพิ่มเนื้อหาโพสต์ ลงในcontent
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="หัวข้อโพสต์"
+            type="email"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="outlined-multiline-static"
+            label="เนื้อหาโพสต์"
+            multiline
+            rows={4}
+            // defaultValue="Default Value"
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>ยกเลิก</Button>
+          <Button onClick={handleClose}>โพสต์</Button>
+        </DialogActions>
+        </Dialog>
 
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
@@ -203,7 +252,7 @@ export default function UserPage() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                    const { id, name, lastName, role, status, company, avatarUrl, isVerified } = row;
                     const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
@@ -216,20 +265,27 @@ export default function UserPage() {
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar alt={name} src={avatarUrl} />
                             <Typography variant="subtitle2" noWrap>
-                              {name}
+                              {name} {lastName}
                             </Typography>
                           </Stack>
                         </TableCell>
 
                         <TableCell align="left">{company}</TableCell>
 
+                        <TableCell align="left">{company}</TableCell>
+
                         <TableCell align="left">{role}</TableCell>
+
+                        <TableCell align="left">{company}</TableCell>
 
                         {/* <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
 
                         <TableCell align="left">
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell> */}
+
+                        <TableCell align="left">{company}</TableCell>
+                        
 
                         <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
