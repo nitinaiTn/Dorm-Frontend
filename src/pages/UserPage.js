@@ -29,7 +29,7 @@ import Scrollbar from '../components/scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
-// import USERLIST from '../_mock/user';
+import USERLIST from '../_mock/user';
 
 // ----------------------------------------------------------------------
 
@@ -97,17 +97,18 @@ export default function UserPage() {
       const res = await fetch("https://dorm-api.vercel.app/api/user");
       const data = await res.json();
       setData(data);
+      console.log(data)
     }
     fetchData();
   }, []);
 
-  const USERLIST = data.map(item => ({
-    id: item.username,
-    name: item.name,
-    lastName: item.lastName,
-    role: item.role,
-    // isVerified: item.isVerified
-  }));
+  // const USERLIST = data.map(item => ({
+  //   id: item.username,
+  //   avatarUrl: item.name,
+  //   name: item.lastName,
+  //   company: item.role,
+  //   isVerified: item.password,
+  // }));
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
