@@ -29,7 +29,7 @@ import Scrollbar from '../components/scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
-import USERLIST from '../_mock/user';
+// import USERLIST from '../_mock/user';
 
 // ----------------------------------------------------------------------
 
@@ -102,13 +102,14 @@ export default function UserPage() {
     fetchData();
   }, []);
 
-  // const USERLIST = data.map(item => ({
-  //   id: item.username,
-  //   avatarUrl: item.name,
-  //   name: item.lastName,
-  //   company: item.role,
-  //   isVerified: item.password,
-  // }));
+  const USERLIST = data.map(item => ({
+    user_id: item.user_id,
+    avatarUrl: `/assets/images/avatars/avatar_${item + 1}.jpg`,
+    name: item.name,
+    lastName: item.lastName,
+    role: item.role,
+    status: item.password,
+  }));
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -224,11 +225,11 @@ export default function UserPage() {
 
                         <TableCell align="left">{role}</TableCell>
 
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
+                        {/* <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
 
                         <TableCell align="left">
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
-                        </TableCell>
+                        </TableCell> */}
 
                         <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
