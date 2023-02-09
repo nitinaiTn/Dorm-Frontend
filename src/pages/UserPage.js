@@ -42,9 +42,10 @@ import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 const TABLE_HEAD = [
   { id: 'name', label: 'ชื่อผู้เช่า', alignRight: false },
   { id: 'property', label: 'ตึก', alignRight: false },
+  { id: 'floor', label: 'ชั้น', alignRight: false },
   { id: 'room', label: 'ห้อง', alignRight: false },
   { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
+  // { id: 'isVerifiedsddsd', label: 'Verified', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   { id: '' },
 ];
@@ -125,7 +126,10 @@ export default function UserPage() {
     name: item.name,
     lastName: item.lastName,
     role: item.role,
-    status: item.password,
+    status: item.room_status,
+    property: item.property_id,
+    floor: item.floor_number,
+    room: item.room_number,
   }));
 
   const handleOpenMenu = (event) => {
@@ -252,7 +256,7 @@ export default function UserPage() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, lastName, role, status, company, avatarUrl, isVerified } = row;
+                    const { id, name, lastName, role, status, avatarUrl, property, floor, room } = row;
                     const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
@@ -270,13 +274,15 @@ export default function UserPage() {
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="left">{company}</TableCell>
+                        <TableCell align="left">{property}</TableCell>
 
-                        <TableCell align="left">{company}</TableCell>
+                        <TableCell align="left">{floor}</TableCell>
+
+                        <TableCell align="left">{room}</TableCell>
 
                         <TableCell align="left">{role}</TableCell>
 
-                        <TableCell align="left">{company}</TableCell>
+                        <TableCell align="left">{status}</TableCell>
 
                         {/* <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
 
@@ -284,7 +290,7 @@ export default function UserPage() {
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell> */}
 
-                        <TableCell align="left">{company}</TableCell>
+                        {/* <TableCell align="left">{company}</TableCell> */}
                         
 
                         <TableCell align="right">
