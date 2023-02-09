@@ -28,7 +28,7 @@ const navConfig = [
   },
   {
     title: 'แจ้งซ่อม',
-    path: '/Maintain',
+    path: '/dashboard/maintain',
     icon: icon('ic_lock'),
   },
   {
