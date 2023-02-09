@@ -12,7 +12,7 @@ const navConfig = [
     icon: icon('ic_analytics'),
   },
   {
-    title: 'user',
+    title: 'ผู้เช่า',
     path: '/dashboard/user',
     icon: icon('ic_user'),
   },
@@ -22,12 +22,17 @@ const navConfig = [
   //   icon: icon('ic_cart'),
   // },
   {
-    title: 'blog',
+    title: 'แจ้งข่าวสาร',
     path: '/dashboard/blog',
     icon: icon('ic_blog'),
   },
   {
-    title: 'Maintain',
+    title: 'แจ้งซ่อม',
+    path: '/Maintain',
+    icon: icon('ic_lock'),
+  },
+  {
+    title: 'ตั้งค่าหอพัก',
     path: '/Maintain',
     icon: icon('ic_lock'),
   },
