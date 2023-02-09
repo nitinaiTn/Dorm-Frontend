@@ -39,12 +39,11 @@ import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'ชื่อผู้เช่า', alignRight: false },
+  { id: 'subjectName', label: 'เรื่องที่แจ้ง', alignRight: false },
+  { id: 'name', label: 'ชื่อผู้แจ้ง', alignRight: false },
   { id: 'property', label: 'ตึก', alignRight: false },
-  { id: 'floor', label: 'ชั้น', alignRight: false },
   { id: 'room', label: 'ห้อง', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  // { id: 'isVerifiedsddsd', label: 'Verified', alignRight: false },
+  { id: 'date', label: 'วันที่แจ้ง', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   { id: '' },
 ];
@@ -111,7 +110,7 @@ export default function UserPage() {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch("https://dorm-api.vercel.app/api/user");
+      const res = await fetch("https://dorm-api.vercel.app/api/maintenance");
       const data = await res.json();
       setData(data);
       console.log(data)
@@ -119,16 +118,16 @@ export default function UserPage() {
     fetchData();
   }, []);
 
-  const USERLIST = data.map(item => ({
-    user_id: item.user_id,
-    avatarUrl: `/assets/images/avatars/avatar_${item + 1}.jpg`,
+  const maintainLIST = data.map(item => ({
+    id: item.request_id,
+    userID: item.user_id,
     name: item.name,
     lastName: item.lastName,
-    role: item.role,
-    status: item.room_status,
+    status: item.request_status,
     property: item.property_id,
-    floor: item.floor_number,
-    room: item.room_number,
+    room: item.room_id,
+    requestText: item.request_text,
+    dateCreate: item.date_created,
   }));
 
   const handleOpenMenu = (event) => {
@@ -147,7 +146,7 @@ export default function UserPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = maintainLIST.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -183,9 +182,9 @@ export default function UserPage() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - maintainLIST.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(maintainLIST, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -193,50 +192,18 @@ export default function UserPage() {
   return (
     <>
       <Helmet>
-        <title> User | Minimal UI </title>
+        <title> Maintain | Minimal UI </title>
       </Helmet>
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            ผู้เช่า
+            แจ้งซ่อม
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick ={handleClickOpen}>
-            เพิ่มผู้เช่าใหม่
-          </Button>
+          {/* <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick ={handleClickOpen}>
+            เพิ่มเรื่องแจ้ง
+          </Button> */}
         </Stack>
-
-        <Dialog open={openCreate} onClose={handleClose}>
-        <DialogTitle>เพิ่มโพสต์</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            เพิ่มเนื้อหาโพสต์ ลงในcontent
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="หัวข้อโพสต์"
-            type="email"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="outlined-multiline-static"
-            label="เนื้อหาโพสต์"
-            multiline
-            rows={4}
-            // defaultValue="Default Value"
-            fullWidth
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>ยกเลิก</Button>
-          <Button onClick={handleClose}>โพสต์</Button>
-        </DialogActions>
-        </Dialog>
 
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
@@ -248,14 +215,14 @@ export default function UserPage() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
+                  rowCount={maintainLIST.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, lastName, role, status, avatarUrl, property, floor, room } = row;
+                    const { id, requestText , userID, name, lastName, status, property, room, dateCreate } = row;
                     const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
@@ -266,20 +233,20 @@ export default function UserPage() {
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
+                            {/* <Avatar alt={name} src={avatarUrl} /> */}
                             <Typography variant="subtitle2" noWrap>
-                              {name} {lastName}
+                              {requestText}
                             </Typography>
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="left">{property}</TableCell>
+                        <TableCell align="left">{name} {lastName}</TableCell>
 
-                        <TableCell align="left">{floor}</TableCell>
+                        <TableCell align="left">{property}</TableCell>
 
                         <TableCell align="left">{room}</TableCell>
 
-                        <TableCell align="left">{role}</TableCell>
+                        <TableCell align="left">{dateCreate}</TableCell>
 
                         <TableCell align="left">{status}</TableCell>
 
@@ -288,9 +255,6 @@ export default function UserPage() {
                         <TableCell align="left">
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell> */}
-
-                        {/* <TableCell align="left">{company}</TableCell> */}
-                        
 
                         <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
@@ -337,7 +301,7 @@ export default function UserPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={maintainLIST.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -364,6 +328,11 @@ export default function UserPage() {
           },
         }}
       >
+        <MenuItem>
+          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
+          ดูรายละเอียด
+        </MenuItem>
+
         <MenuItem>
           <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
           แก้ไข
