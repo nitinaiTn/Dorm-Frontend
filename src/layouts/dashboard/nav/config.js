@@ -33,7 +33,7 @@ const navConfig = [
   },
   {
     title: 'ตั้งค่าหอพัก',
-    path: '/Maintain',
+    path: '/dashboard/setting',
     icon: icon('ic_lock'),
   },
   {
