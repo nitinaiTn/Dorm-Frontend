@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { faker } from '@faker-js/faker';
 // @mui
 import { Grid, Button, Container, Stack, Typography, TextField,
    Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
@@ -7,8 +8,9 @@ import { Grid, Button, Container, Stack, Typography, TextField,
 import Iconify from '../components/iconify';
 import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../sections/@dashboard/blog';
 // mock
-import POSTS from '../_mock/blog';
+// import POSTS from '../_mock/blog';
 // import { json } from 'react-router-dom';
+
 
 
 // ----------------------------------------------------------------------
@@ -25,6 +27,9 @@ export default function BlogPage() {
 
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false)
+  const [data, setData] = useState([])
+  const [inputTitle, setInputTitle] = useState("");
+  const [inputText, setInputText] = useState("")
 
   const handleClickOpen = () =>{
     setOpen(true)
@@ -34,8 +39,35 @@ export default function BlogPage() {
     setOpen(false)
   }
 
+  useEffect(() => {
+    async function fetchData() {
+      const res = await fetch("https://dorm-api.vercel.app/api/post");
+      const data = await res.json();
+      setData(data);
+      console.log(data)
+    }
+    fetchData();
+  }, []);
+
+  const postLIST = data.map(item => ({
+    id: item.post_id,
+    cover: `/assets/images/covers/cover_${item + 1}.jpg`,
+    title: item.post_title,
+    postText: item.post_text,
+    createdAt: item.date_created,
+    view: faker.datatype.number(),
+    comment: faker.datatype.number(),
+    share: faker.datatype.number(),
+    favorite: faker.datatype.number(),
+    author: {
+      name: item.name,
+      avatarUrl: `/assets/images/avatars/avatar_${item + 1}.jpg`,
+    },
+  }));
+
   const handleClick = async () => {
-    console.log(new Date().toISOString());
+    // console.log(new Date().toISOString());
+    console.log(inputText,inputTitle)
     setLoading(true);
     try {
       // const formData = new FormData();
@@ -46,8 +78,8 @@ export default function BlogPage() {
       // console.log(formData)
       const data = {
         "user_id": 2,
-        "post_title": "แจ้งปิดหอ",
-        "post_text": "ปิดหอวันที่31"
+        "post_title": inputTitle,
+        "post_text": inputText
       }
       const response = await fetch("https://dorm-api.vercel.app/api/post", {
         method: "POST",
@@ -74,7 +106,7 @@ export default function BlogPage() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Blog
+            แจ้งข่าวสาร
           </Typography>
           <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleClickOpen}>
             New Post
@@ -95,6 +127,8 @@ export default function BlogPage() {
             type="email"
             fullWidth
             variant="standard"
+            value={inputTitle}
+            onChange={e => setInputTitle(e.target.value)}
           />
           <TextField
             autoFocus
@@ -105,22 +139,24 @@ export default function BlogPage() {
             rows={4}
             // defaultValue="Default Value"
             fullWidth
+            value={inputText}
+            onChange={e => setInputText(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>ยกเลิก</Button>
-          <Button onClick={handleClose}>โพสต์</Button>
+          <Button onClick={handleClick}>โพสต์</Button>
         </DialogActions>
         </Dialog>
 
         <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
-          <BlogPostsSearch posts={POSTS} />
+          <BlogPostsSearch posts={postLIST} />
           <BlogPostsSort options={SORT_OPTIONS} />
         </Stack>
 
         <Grid container spacing={3}>
-          {POSTS.map((post, index) => (
-            <BlogPostCard key={post.id} post={post} index={index} />
+          {postLIST.map((postLIST, index) => (
+            <BlogPostCard key={postLIST.post_id} post={postLIST} index={index} />
           ))}
         </Grid>
       </Container>

@@ -57,14 +57,14 @@ BlogPostCard.propTypes = {
 };
 
 export default function BlogPostCard({ post, index }) {
-  const { cover, title, view, comment, share, author, createdAt } = post;
+  const { cover, title, view, comment, share, author, createdAt, postText } = post;
   const latestPostLarge = index === 0;
   const latestPost = index === 1 || index === 2;
 
   const POST_INFO = [
     { number: comment, icon: 'eva:message-circle-fill' },
-    { number: view, icon: 'eva:eye-fill' },
-    { number: share, icon: 'eva:share-fill' },
+    // { number: view, icon: 'eva:eye-fill' },
+    // { number: share, icon: 'eva:share-fill' },
   ];
 
   return (
@@ -117,8 +117,9 @@ export default function BlogPostCard({ post, index }) {
               }),
             }}
           />
-
-          <StyledCover alt={title} src={cover} />
+          
+          <StyledCover  src={cover} />
+          
         </StyledCardMedia>
 
         <CardContent
@@ -148,6 +149,10 @@ export default function BlogPostCard({ post, index }) {
           >
             {title}
           </StyledTitle>
+
+          <Typography alt={postText} gutterBottom variant="caption" sx={{ color: 'text.disabled', display: 'block' }}>
+            {postText}
+          </Typography>
 
           <StyledInfo>
             {POST_INFO.map((info, index) => (
