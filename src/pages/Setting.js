@@ -2,12 +2,10 @@ import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 // @mui
 import { Container, Stack, Typography } from '@mui/material';
+import Button from 'src/theme/overrides/Button';
 // components
 // import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
-// // mock
-// import PRODUCTS from '../_mock/products';
 
-// ----------------------------------------------------------------------
 
 export default function ProductsPage() {
   const [openFilter, setOpenFilter] = useState(false);
@@ -31,19 +29,6 @@ export default function ProductsPage() {
           ตั้งค่าหอพัก
         </Typography>
 
-        {/* <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <ProductFilterSidebar
-              openFilter={openFilter}
-              onOpenFilter={handleOpenFilter}
-              onCloseFilter={handleCloseFilter}
-            />
-            <ProductSort />
-          </Stack>
-        </Stack>
-
-        <ProductList products={PRODUCTS} />
-        <ProductCartWidget /> */}
       </Container>
     </>
   );
