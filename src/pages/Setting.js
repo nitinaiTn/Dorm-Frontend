@@ -23,19 +23,27 @@ export default function ProductsPage() {
 
       <Container>
         <Stack>
+          <Typography variant='h5' sx = {{pb: 3}}>ตั้งค่าหอพัก</Typography>
           <Card >
             <CardContent>
               <Typography>
-                Hello Title
+                ใส่ตั้งค่า
               </Typography>
               <Typography>
-                Hello Content
+                ทำการติดตั้ง
               </Typography>
+              <Stack
+                direction= "row"
+                alignItem= "center"
+                justifyContent= "end"
+              >
+                <Button>Done</Button>
+                <Button>Cancle</Button>
+              </Stack>
             </CardContent>
-            <CardActions>
-              <Button sx = {{ml: 1}}>Done</Button>
-              <Button>Cancle</Button>
-            </CardActions>
+            {/* <CardActions>
+              
+            </CardActions> */}
           </Card>
         </Stack>
       </Container>
