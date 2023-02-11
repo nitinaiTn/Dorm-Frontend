@@ -35,7 +35,6 @@ import Scrollbar from '../components/scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
-// import USERLIST from '../_mock/user';
 
 // ----------------------------------------------------------------------
 
@@ -45,7 +44,6 @@ const TABLE_HEAD = [
   { id: 'floor', label: 'ชั้น', alignRight: false },
   { id: 'room', label: 'ห้อง', alignRight: false },
   { id: 'role', label: 'Role', alignRight: false },
-  // { id: 'isVerifiedsddsd', label: 'Verified', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   { id: '' },
 ];
@@ -282,16 +280,9 @@ export default function UserPage() {
 
                         <TableCell align="left">{role}</TableCell>
 
-                        <TableCell align="left">{status}</TableCell>
-
-                        {/* <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-
                         <TableCell align="left">
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
-                        </TableCell> */}
-
-                        {/* <TableCell align="left">{company}</TableCell> */}
-                        
+                        </TableCell>
 
                         <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
