@@ -90,6 +90,7 @@ export default function BlogPage() {
       });
       console.log(response.data);
       console.log("Add Succed");
+      handleClose()
     } catch (error) {
       console.error(error);
     } finally {
