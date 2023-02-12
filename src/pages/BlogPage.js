@@ -3,7 +3,9 @@ import { Helmet } from 'react-helmet-async';
 import { faker } from '@faker-js/faker';
 // @mui
 import { Grid, Button, Container, Stack, Typography, TextField,
-   Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+  Alert, Snackbar
+  } from '@mui/material';
 // components
 import Iconify from '../components/iconify';
 import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../sections/@dashboard/blog';
@@ -27,6 +29,7 @@ export default function BlogPage() {
 
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false)
+  const [openSnack, setOpenSnack] = useState(false);
   const [data, setData] = useState([])
   const [inputTitle, setInputTitle] = useState("");
   const [inputText, setInputText] = useState("")
@@ -37,6 +40,14 @@ export default function BlogPage() {
 
   const handleClose = () => {
     setOpen(false)
+  }
+
+  const handleOpenSnack = () =>{
+    setOpenSnack(true)
+  }
+
+  const handleCloseSnack = () => {
+    setOpenSnack(false)
   }
 
   useEffect(() => {
@@ -66,16 +77,8 @@ export default function BlogPage() {
   }));
 
   const handleClick = async () => {
-    // console.log(new Date().toISOString());
-    console.log(inputText,inputTitle)
     setLoading(true);
     try {
-      // const formData = new FormData();
-      // formData.append("user_id", 4);
-      // formData.append("post_title", "fetch form dash");
-      // formData.append("post_text", "Hwwwttt");
-      // formData.append("date_created", new Date().toISOString());
-      // console.log(formData)
       const data = {
         "user_id": 2,
         "post_title": inputTitle,
@@ -90,7 +93,8 @@ export default function BlogPage() {
       });
       console.log(response.data);
       console.log("Add Succed");
-      handleClose()
+      handleOpenSnack()
+      handleClose()  
     } catch (error) {
       console.error(error);
     } finally {
@@ -138,7 +142,6 @@ export default function BlogPage() {
             label="เนื้อหาโพสต์"
             multiline
             rows={4}
-            // defaultValue="Default Value"
             fullWidth
             value={inputText}
             onChange={e => setInputText(e.target.value)}
@@ -149,6 +152,17 @@ export default function BlogPage() {
           <Button onClick={handleClick}>โพสต์</Button>
         </DialogActions>
         </Dialog>
+
+        <Snackbar
+            open={openSnack}
+            autoHideDuration={2000}
+            onClose={handleCloseSnack}
+            anchorOrigin= {{vertical: 'top', horizontal: 'right'}}
+          >
+            <Alert onClose={handleCloseSnack} severity="success" sx={{ width: '100%' }}>
+              เพิ่มสำเร็จ
+            </Alert>
+          </Snackbar>
 
         <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
           <BlogPostsSearch posts={postLIST} />

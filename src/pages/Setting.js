@@ -6,9 +6,6 @@ import { Container, Stack, Typography, Card, CardActions, CardContent, Button, S
 
 export default function ProductsPage() {
   const [openFilter, setOpenFilter] = useState(false);
-  const [transition, setTransition] = useState(undefined);
-
-
   const [open, setOpen] = useState(false);
 
   const handleClick = () => {
