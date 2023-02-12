@@ -1,11 +1,23 @@
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 // @mui
-import { Container, Stack, Typography, Card, CardActions, CardContent, Button} from '@mui/material';
+import { Container, Stack, Typography, Card, CardActions, CardContent, Button, Snackbar, Alert} from '@mui/material';
 // components
 
 export default function ProductsPage() {
   const [openFilter, setOpenFilter] = useState(false);
+  const [transition, setTransition] = useState(undefined);
+
+
+  const [open, setOpen] = useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    setOpen(false);
+  };
 
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -24,6 +36,16 @@ export default function ProductsPage() {
       <Container>
         <Stack>
           <Typography variant='h5' sx = {{pb: 3}}>ตั้งค่าหอพัก</Typography>
+          <Snackbar
+            open={open}
+            autoHideDuration={2000}
+            onClose={handleClose}
+            anchorOrigin= {{vertical: 'top', horizontal: 'right'}}
+          >
+            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+              แก้ไขสำเร็จ
+            </Alert>
+          </Snackbar>
           <Card >
             <CardContent>
               <Typography>
@@ -37,7 +59,7 @@ export default function ProductsPage() {
                 alignItem= "center"
                 justifyContent= "end"
               >
-                <Button>Done</Button>
+                <Button onClick={handleClick}>Done</Button>
                 <Button>Cancle</Button>
               </Stack>
             </CardContent>
