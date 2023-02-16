@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 // @mui
-import { Container, Stack, Typography, Card, CardActions, CardContent, Button, Snackbar, Alert} from '@mui/material';
+import { Container, Stack, Typography, Card, CardActions, CardContent, Button, Snackbar, Alert, TextField} from '@mui/material';
 // components
 
 export default function ProductsPage() {
@@ -45,24 +45,52 @@ export default function ProductsPage() {
           </Snackbar>
           <Card >
             <CardContent>
-              <Typography>
-                ใส่ตั้งค่า
-              </Typography>
-              <Typography>
-                ทำการติดตั้ง
-              </Typography>
               <Stack
                 direction= "row"
                 alignItem= "center"
-                justifyContent= "end"
+                justifyContent= "start"
+                spacing={2}
               >
-                <Button onClick={handleClick}>Done</Button>
-                <Button>Cancle</Button>
+                <Stack spacing={2}>
+                  <TextField>
+                    s
+                  </TextField>
+                  <TextField>
+                   s 
+                  </TextField>
+                  <TextField>
+                    s
+                  </TextField>
+                  <TextField>
+                    s
+                  </TextField>
+                  <TextField>
+                    s
+                  </TextField>
+                </Stack>
+
+                <Stack spacing={2}>
+                  <TextField>
+                    s
+                  </TextField>
+                  <TextField>
+                    d
+                  </TextField>
+                  <TextField>
+                    d
+                  </TextField>
+                  <TextField>
+                    d
+                  </TextField>
+                  <TextField>
+                    d
+                  </TextField>
+                </Stack>
               </Stack>
             </CardContent>
-            {/* <CardActions>
-              
-            </CardActions> */}
+            <CardActions sx>
+              <Button>Hello</Button>
+            </CardActions>
           </Card>
         </Stack>
       </Container>
