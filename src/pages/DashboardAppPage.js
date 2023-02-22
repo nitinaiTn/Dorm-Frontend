@@ -1,8 +1,9 @@
+import React, { useState, useEffect, useMomo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { faker } from '@faker-js/faker';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Grid, Container, Typography } from '@mui/material';
+import { Grid, Container, Typography, Stack } from '@mui/material';
 // components
 import Iconify from '../components/iconify';
 // sections
@@ -22,6 +23,18 @@ import {
 
 export default function DashboardAppPage() {
   const theme = useTheme();
+  const [dateTime, setDateTime] = useState(new Date());
+
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     setDateTime(new Date());
+  //   }, 1000);
+
+  //   return () => clearInterval(intervalId);
+  // }, [dateTime]);
+
+  // const options = { timeZone: 'Asia/Bangkok' };
+  // const formattedDateTime = dateTime.toLocaleString('en-US', options);
 
   return (
     <>
@@ -30,12 +43,20 @@ export default function DashboardAppPage() {
       </Helmet>
 
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
-          Hi, Welcome back
-        </Typography>
+
+        <Stack direction={'row'} sx={{justifyContent: 'space-between'}}>
+          <Typography variant="h4" sx={{ mb: 5 }}>
+            สวัสดี, ยินต้อนรับ
+          </Typography>
+
+          {/* <Typography variant="h4" sx={{ mb: 5 }}>
+            {formattedDateTime} 
+          </Typography> */}
+
+        </Stack>
 
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={3}>
+          {/* <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary title="Weekly Sales" total={714000} icon={'ant-design:android-filled'} />
           </Grid>
 
@@ -49,11 +70,11 @@ export default function DashboardAppPage() {
 
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary title="Bug Reports" total={234} color="error" icon={'ant-design:bug-filled'} />
-          </Grid>
+          </Grid> */}
 
           <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits
-              title="Website Visits"
+              title="อัตราการใช้หน่วยในหอพัก"
               subheader="(+43%) than last year"
               chartLabels={[
                 '01/01/2003',
@@ -128,7 +149,7 @@ export default function DashboardAppPage() {
             />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={4}>
+          {/* <Grid item xs={12} md={6} lg={4}>
             <AppCurrentSubject
               title="Current Subject"
               chartLabels={['English', 'History', 'Physics', 'Geography', 'Chinese', 'Math']}
@@ -139,10 +160,10 @@ export default function DashboardAppPage() {
               ]}
               chartColors={[...Array(6)].map(() => theme.palette.text.secondary)}
             />
-          </Grid>
+          </Grid> */}
 
           <Grid item xs={12} md={6} lg={8}>
-            <AppNewsUpdate
+            {/* <AppNewsUpdate
               title="News Update"
               list={[...Array(5)].map((_, index) => ({
                 id: faker.datatype.uuid(),
@@ -151,12 +172,12 @@ export default function DashboardAppPage() {
                 image: `/assets/images/covers/cover_${index + 1}.jpg`,
                 postedAt: faker.date.recent(),
               }))}
-            />
+            /> */}
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
             <AppOrderTimeline
-              title="Order Timeline"
+              title="รายการเข้า-ออกหอพัก"
               list={[...Array(5)].map((_, index) => ({
                 id: faker.datatype.uuid(),
                 title: [
