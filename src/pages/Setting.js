@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 // @mui
-import { Container, Stack, Typography, Card, CardActions, CardContent, Button, Snackbar, Alert, TextField} from '@mui/material';
+import { Container, Stack, Typography, Card, CardActions, CardContent, Button, Snackbar, Alert, TextField, Grid } from '@mui/material';
 // components
 
 export default function ProductsPage() {
@@ -30,69 +30,91 @@ export default function ProductsPage() {
         <title> Dashboard: Setting | Minimal UI </title>
       </Helmet>
 
-      <Container>
-        <Stack>
-          <Typography variant='h5' sx = {{pb: 3}}>ตั้งค่าหอพัก</Typography>
-          <Snackbar
-            open={open}
-            autoHideDuration={2000}
-            onClose={handleClose}
-            anchorOrigin= {{vertical: 'top', horizontal: 'right'}}
-          >
-            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-              แก้ไขสำเร็จ
-            </Alert>
-          </Snackbar>
-          <Card >
-            <CardContent>
-              <Stack
-                direction= "row"
-                alignItem= "center"
-                justifyContent= "start"
-                spacing={2}
+      <Container maxWidth="xl">
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6} lg={8}>
+            <Stack>
+              <Typography variant='h5' sx={{ pb: 3 }}>ตั้งค่าหอพัก</Typography>
+              <Snackbar
+                open={open}
+                autoHideDuration={2000}
+                onClose={handleClose}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
               >
-                <Stack spacing={2}>
-                  <TextField>
-                    s
-                  </TextField>
-                  <TextField>
-                   s 
-                  </TextField>
-                  <TextField>
-                    s
-                  </TextField>
-                  <TextField>
-                    s
-                  </TextField>
-                  <TextField>
-                    s
-                  </TextField>
-                </Stack>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                  แก้ไขสำเร็จ
+                </Alert>
+              </Snackbar>
+            </Stack>
+          </Grid>
 
-                <Stack spacing={2}>
-                  <TextField>
-                    s
-                  </TextField>
-                  <TextField>
-                    d
-                  </TextField>
-                  <TextField>
-                    d
-                  </TextField>
-                  <TextField>
-                    d
-                  </TextField>
-                  <TextField>
-                    d
-                  </TextField>
+          <Grid item xs={12} md={6} lg={8}>
+            <Card >
+              <CardContent>
+                <Stack
+                  direction="row"
+                  alignItem="center"
+                  justifyContent="start"
+                  spacing={2}
+                >
+                  <Typography>สถานะตั้งค่าหอพักปัจจุบัน</Typography>
                 </Stack>
-              </Stack>
-            </CardContent>
-            <CardActions sx>
-              <Button>Hello</Button>
-            </CardActions>
-          </Card>
-        </Stack>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} md={6} lg={12}>
+            <Card sx={{ my: 5 }}>
+              <CardContent>
+                <Stack
+                  direction="row"
+                  alignItem="center"
+                  justifyContent="start"
+                  spacing={2}
+                >
+                  <Stack spacing={2}>
+                    <TextField>
+                      s
+                    </TextField>
+                    <TextField>
+                      s
+                    </TextField>
+                    <TextField>
+                      s
+                    </TextField>
+                    <TextField>
+                      s
+                    </TextField>
+                    <TextField>
+                      s
+                    </TextField>
+                  </Stack>
+
+                  <Stack spacing={2}>
+                    <TextField>
+                      s
+                    </TextField>
+                    <TextField>
+                      d
+                    </TextField>
+                    <TextField>
+                      d
+                    </TextField>
+                    <TextField>
+                      d
+                    </TextField>
+                    <TextField>
+                      d
+                    </TextField>
+                  </Stack>
+                </Stack>
+              </CardContent>
+              <CardActions sx>
+                <Button>Hello</Button>
+              </CardActions>
+            </Card>
+          </Grid>
+        </Grid>
       </Container>
     </>
   );
