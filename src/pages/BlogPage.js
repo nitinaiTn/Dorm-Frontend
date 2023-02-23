@@ -67,7 +67,7 @@ export default function BlogPage() {
     postText: item.post_text,
     createdAt: item.date_created,
     view: faker.datatype.number(),
-    comment: faker.datatype.number(),
+    // comment: faker.datatype.number(),
     share: faker.datatype.number(),
     favorite: faker.datatype.number(),
     author: {

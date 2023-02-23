@@ -80,7 +80,6 @@ export default function BlogPostCard({ post, index }) {
                 width: '100%',
                 height: '100%',
                 position: 'absolute',
-                bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72),
               },
             }),
             ...(latestPostLarge && {
@@ -154,7 +153,7 @@ export default function BlogPostCard({ post, index }) {
             {postText}
           </Typography>
 
-          <StyledInfo>
+          {/* <StyledInfo>
             {POST_INFO.map((info, index) => (
               <Box
                 key={index}
@@ -171,7 +170,7 @@ export default function BlogPostCard({ post, index }) {
                 <Typography variant="caption">{fShortenNumber(info.number)}</Typography>
               </Box>
             ))}
-          </StyledInfo>
+          </StyledInfo> */}
         </CardContent>
       </Card>
     </Grid>
