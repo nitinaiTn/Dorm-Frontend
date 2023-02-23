@@ -164,10 +164,10 @@ export default function BlogPage() {
             </Alert>
           </Snackbar>
 
-        <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
+        {/* <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
           <BlogPostsSearch posts={postLIST} />
           <BlogPostsSort options={SORT_OPTIONS} />
-        </Stack>
+        </Stack> */}
 
         <Grid container spacing={3}>
           {postLIST.map((postLIST, index) => (
