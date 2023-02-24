@@ -113,13 +113,12 @@ export default function UserPage() {
       const res = await fetch("https://dorm-api.vercel.app/api/user");
       const data = await res.json();
       setData(data);
-      console.log(data)
     }
     fetchData();
   }, []);
 
   const USERLIST = data.map(item => ({
-    user_id: item.user_id,
+    userId: item.user_id,
     avatarUrl: `/assets/images/avatars/avatar_${item + 1}.jpg`,
     name: item.name,
     lastName: item.lastName,
@@ -129,6 +128,26 @@ export default function UserPage() {
     floor: item.floor_number,
     room: item.room_number,
   }));
+
+  async function deleteRecord() {
+    try {
+      const response = await fetch(`https://your-api-endpoint.com/records/134`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to delete record');
+      }
+  
+      // Update the state to remove the deleted record
+      // setData((prevState) => prevState.filter((record) => record.id !== id));
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -192,7 +211,7 @@ export default function UserPage() {
   return (
     <>
       <Helmet>
-        <title> User | Minimal UI </title>
+        <title> ผู้ใช้งาน | Dashboard</title>
       </Helmet>
 
       <Container>
@@ -254,11 +273,11 @@ export default function UserPage() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, lastName, role, status, avatarUrl, property, floor, room } = row;
+                    const { userId, name, lastName, role, status, avatarUrl, property, floor, room } = row;
                     const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
-                      <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
+                      <TableRow hover key={userId} tabIndex={-1} role="checkbox" selected={selectedUser}>
                         <TableCell padding="checkbox">
                           <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
                         </TableCell>
@@ -361,7 +380,7 @@ export default function UserPage() {
           แก้ไข
         </MenuItem>
 
-        <MenuItem sx={{ color: 'error.main' }}>
+        <MenuItem sx={{ color: 'error.main' }} onClick = {() => deleteRecord()}>
           <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
           ลบ
         </MenuItem>
