@@ -1,3 +1,4 @@
+import React, { createContext, useState } from 'react'
 // routes
 import Router from './routes';
 // theme
@@ -8,12 +9,18 @@ import { StyledChart } from './components/chart';
 
 // ----------------------------------------------------------------------
 
+export const UserContext = createContext()
+
 export default function App() {
+  const [userData, setUserData] = useState(null)
+  
   return (
     <ThemeProvider>
       <ScrollToTop />
       <StyledChart />
-      <Router />
+      <UserContext.Provider value={{ userData, setUserData }}>
+        <Router />
+      </UserContext.Provider>
     </ThemeProvider>
   );
 }
