@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useContext} from 'react';
 import { json, useNavigate } from 'react-router-dom';
 // @mui
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
 import Iconify from '../../../components/iconify';
+import {UserContext} from '../../../App';
 
 // ----------------------------------------------------------------------
 
@@ -13,6 +14,7 @@ export default function LoginForm() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false);
+  const {setUserData} = useContext(UserContext)
 
   const handleClick = async (event) => {
     event.preventDefault();
@@ -26,11 +28,13 @@ export default function LoginForm() {
       });
       const data = await response.json()
       console.log(data)
+      setUserData(data)
       navigate('/dashboard', { replace: true });
     }catch(err){
       console.log(err)
     }
   };
+  
 
   return (
     <>
