@@ -27,6 +27,22 @@ const StyledAccount = styled('div')(({ theme }) => ({
   backgroundColor: alpha(theme.palette.grey[500], 0.12),
 }));
 
+function LetterAvatar({ name, lastname }) {
+  const getInitials = (name, lastname) => {
+    const firstName = name ? name.charAt(0) : '';
+    const lastName = lastname ? lastname.charAt(0) : '';
+    return firstName + lastName;
+  };
+
+  const initials = getInitials(name, lastname);
+
+  return (
+    <Avatar>
+      {initials}
+    </Avatar>
+  );
+}
+
 // ----------------------------------------------------------------------
 
 Nav.propTypes = {
@@ -43,7 +59,7 @@ export default function Nav({ openNav, onCloseNav }) {
   const isDesktop = useResponsive('up', 'lg');
 
   const fetchData = async () => {
-    const resp = await fetch("https://dorm-api.vercel.app/api/user/1");
+    const resp = await fetch("https://dorm-api.vercel.app/api/user/3");
     const data = await resp.json()
     setName(data[0].name)
     setlastName(data[0].lastName)
@@ -75,7 +91,7 @@ export default function Nav({ openNav, onCloseNav }) {
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none">
           <StyledAccount>
-            <Avatar src={account.photoURL} alt="photoURL" />
+            <LetterAvatar name = {name} lastname = {lastname}/>
 
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>

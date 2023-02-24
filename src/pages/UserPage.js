@@ -200,12 +200,12 @@ export default function UserPage() {
           <Typography variant="h4" gutterBottom>
             ผู้เช่า
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick ={handleClickOpen}>
+          {/* <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick ={handleClickOpen}>
             เพิ่มผู้เช่าใหม่
-          </Button>
+          </Button> */}
         </Stack>
 
-        <Dialog open={openCreate} onClose={handleClose}>
+        {/* <Dialog open={openCreate} onClose={handleClose}>
         <DialogTitle>เพิ่มโพสต์</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -235,7 +235,7 @@ export default function UserPage() {
           <Button onClick={handleClose}>ยกเลิก</Button>
           <Button onClick={handleClose}>โพสต์</Button>
         </DialogActions>
-        </Dialog>
+        </Dialog> */}
 
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />

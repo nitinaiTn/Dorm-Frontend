@@ -22,11 +22,28 @@ const MENU_OPTIONS = [
   },
 ];
 
+function LetterAvatar({ name, lastname }) {
+  const getInitials = (name, lastname) => {
+    const firstName = name ? name.charAt(0) : '';
+    const lastName = lastname ? lastname.charAt(0) : '';
+    return firstName + lastName;
+  };
+
+  const initials = getInitials(name, lastname);
+
+  return (
+    <Avatar>
+      {initials}
+    </Avatar>
+  );
+}
+
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
   const [name, setName] = useState('')
+  const [lastname, setlastName] = useState('')
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -37,11 +54,11 @@ export default function AccountPopover() {
   };
 
   const fetchData = async () => {
-    const resp = await fetch("https://dorm-api.vercel.app/api/user/1");
+    const resp = await fetch("https://dorm-api.vercel.app/api/user/3");
     const data = await resp.json()
-    console.log(data[0].name)
+    
     setName(data[0].name)
-    console.log(name)
+    setlastName(data[0].lastName)
   };
 
   useEffect(()=>{
@@ -67,7 +84,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <LetterAvatar name={name} lastname={lastname} />
       </IconButton>
 
       <Popover
