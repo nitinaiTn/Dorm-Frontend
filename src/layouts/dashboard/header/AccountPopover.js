@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
 // mocks_
 import account from '../../../_mock/account';
+import {UserContext} from '../../../App'
 
 // ----------------------------------------------------------------------
 
@@ -42,8 +43,7 @@ function LetterAvatar({ name, lastname }) {
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
-  const [name, setName] = useState('')
-  const [lastname, setlastName] = useState('')
+  const {userData} = useContext(UserContext)
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -53,17 +53,12 @@ export default function AccountPopover() {
     setOpen(null);
   };
 
-  const fetchData = async () => {
-    const resp = await fetch("https://dorm-api.vercel.app/api/user/3");
-    const data = await resp.json()
-    
-    setName(data[0].name)
-    setlastName(data[0].lastName)
-  };
+  // Check if userData has been initialized before rendering the component
+  if (!userData) {
+    return null; // or some other fallback component
+  }
 
-  useEffect(()=>{
-    fetchData()
-  }, [])
+  const { name, lastname, email } = userData.user;
 
   return (
     <>
@@ -108,10 +103,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {name}
+            {name} {lastname}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {email}
           </Typography>
         </Box>
 
