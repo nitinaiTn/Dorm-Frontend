@@ -36,11 +36,11 @@ const navConfig = [
     path: '/dashboard/setting',
     icon: icon('ic_lock'),
   },
-  // {
-  //   title: 'login',
-  //   path: '/login',
-  //   icon: icon('ic_lock'),
-  // },
+  {
+    title: 'login',
+    path: '/login',
+    icon: icon('ic_lock'),
+  },
   // {
   //   title: 'Not found',
   //   path: '/404',

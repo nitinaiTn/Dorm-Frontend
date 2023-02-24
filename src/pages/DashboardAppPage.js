@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { faker } from '@faker-js/faker';
 import { filter } from 'lodash';
@@ -47,6 +47,7 @@ import {
 import Scrollbar from '../components/scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
+import { UserContext } from '../App';
 
 // ----------------------------------------------------------------------
 
@@ -112,6 +113,8 @@ export default function DashboardAppPage() {
   const [data, setData] = useState([]);
 
   const [utilitydata, setUtilityData] = useState([]);
+
+  const {userData} = useContext(UserContext)
   
   useEffect(() => {
     async function fetchUtility() {
@@ -210,9 +213,12 @@ export default function DashboardAppPage() {
 
         <Stack direction={'row'} sx={{justifyContent: 'space-between'}}>
           <Typography variant="h4" sx={{ mb: 5 }}>
-            สวัสดี, กฤตภาส ยาโด
+            สวัสดี, ยินดีต้องรับกลับ
           </Typography>
 
+          <Typography variant="h4" sx={{ mb: 5 }}>
+            {userData? userData.user.username : "Hello"}
+          </Typography>
           {/* <Typography variant="h4" sx={{ mb: 5 }}>
             {formattedDateTime} 
           </Typography> */}
