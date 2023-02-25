@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
@@ -14,6 +14,7 @@ import Scrollbar from '../../../components/scrollbar';
 import NavSection from '../../../components/nav-section';
 //
 import navConfig from './config';
+import {UserContext} from '../../../App'
 
 // ----------------------------------------------------------------------
 
@@ -52,30 +53,20 @@ Nav.propTypes = {
 
 export default function Nav({ openNav, onCloseNav }) {
   const { pathname } = useLocation();
-  const [name, setName] = useState('')
-  const [lastname, setlastName] = useState('')
-  const [role, setRole] = useState('')
   const [space, setspace] = useState(' ')
   const isDesktop = useResponsive('up', 'lg');
-
-  const fetchData = async () => {
-    const resp = await fetch("https://dorm-api.vercel.app/api/user/3");
-    const data = await resp.json()
-    setName(data[0].name)
-    setlastName(data[0].lastName)
-    setRole(data[0].role)
-  };
-
-  useEffect(()=>{
-    fetchData()
-  }, [])
-
+  const {userData} = useContext(UserContext)
+  
   useEffect(() => {
     if (openNav) {
       onCloseNav();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
+
+  if(!userData) return null
+  
+  const {name, lastname, role }= userData.user
 
   const renderContent = (
     <Scrollbar
