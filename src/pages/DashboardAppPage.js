@@ -482,11 +482,11 @@ export default function DashboardAppPage() {
               list={[...Array(5)].map((_, index) => ({
                 id: faker.datatype.uuid(),
                 title: [
-                  '1983, orders, $4220',
-                  '12 Invoices have been paid',
-                  'Order #37745 from September',
-                  'New order placed #XF-2356',
-                  'New order placed #XF-2346',
+                  'ห้อง 301 ออก',
+                  'ห้อง 301 ออก',
+                  'ห้อง 301 ออก',
+                  'ห้อง 301 ออก',
+                  'ห้อง 301 ออก',
                 ][index],
                 type: `order${index + 1}`,
                 time: faker.date.past(),

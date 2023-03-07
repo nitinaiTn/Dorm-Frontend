@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import {useNavigate } from 'react-router-dom';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
@@ -9,16 +10,16 @@ import {UserContext} from '../../../App'
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
+  // {
+  //   label: 'Home',
+  //   icon: 'eva:home-fill',
+  // },
+  // {
+  //   label: 'Profile',
+  //   icon: 'eva:person-fill',
+  // },
   {
-    label: 'Home',
-    icon: 'eva:home-fill',
-  },
-  {
-    label: 'Profile',
-    icon: 'eva:person-fill',
-  },
-  {
-    label: 'Settings',
+    label: 'ตั้งค่าโปรไฟล์',
     icon: 'eva:settings-2-fill',
   },
 ];
@@ -42,6 +43,7 @@ function LetterAvatar({ name, lastname }) {
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(null);
   const {userData} = useContext(UserContext)
 
@@ -122,8 +124,8 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
-          Logout
+        <MenuItem onClick={() => { handleClose(); navigate('', { replace: true }); }} sx={{ m: 1 }}>
+          ออกจากระบบ
         </MenuItem>
       </Popover>
     </>
