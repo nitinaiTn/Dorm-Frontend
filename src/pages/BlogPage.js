@@ -62,14 +62,15 @@ export default function BlogPage() {
 
   const postLIST = data.map(item => ({
     id: item.post_id,
-    cover: `/assets/images/covers/cover_${item + 1}.jpg`,
+    cover: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyrHPk8PA3LcbnSqnikNs8A2AKJvvWIHgr9w&usqp=CAU`,
+    // cover: `/assets/images/covers/cover_${item + 1}.jpg`,
     title: item.post_title,
     postText: item.post_text,
     createdAt: item.date_created,
     view: faker.datatype.number(),
     // comment: faker.datatype.number(),
-    share: faker.datatype.number(),
-    favorite: faker.datatype.number(),
+    // share: faker.datatype.number(),
+    // favorite: faker.datatype.number(),
     author: {
       name: item.name,
       avatarUrl: `/assets/images/avatars/avatar_${item + 1}.jpg`,

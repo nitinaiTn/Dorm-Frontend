@@ -272,7 +272,7 @@ export default function UserPage() {
                         <TableCell align="left">{role === 'owner'? 'ผู้ดูแลระบบ': 'ผู้เช่า'}</TableCell>
 
                         <TableCell align="left">
-                          <Label color={status === 'owned' ?'error' : 'success'}>{(status) === 'owned'? 'owned' : status}</Label>
+                          <Label color={status === 'owned' ?'error' : 'success'}>{(status) === 'owned'? 'กำลังอยู่' : 'ว่าง'}</Label>
                         </TableCell>
                         
                         <Popover
