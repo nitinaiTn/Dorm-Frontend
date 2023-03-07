@@ -24,8 +24,8 @@ import {
   TextField,
   Dialog,
   DialogActions,
-  DialogContent, 
-  DialogContentText, 
+  DialogContent,
+  DialogContentText,
   DialogTitle
 } from '@mui/material';
 // components
@@ -96,7 +96,7 @@ export default function UserPage() {
 
   const [openCreate, setOpenCreate] = useState(false)
 
-  const handleClickOpen = () =>{
+  const handleClickOpen = () => {
     setOpenCreate(true)
   }
 
@@ -113,6 +113,7 @@ export default function UserPage() {
       const res = await fetch("https://dorm-api.vercel.app/api/user");
       const data = await res.json();
       setData(data);
+      console.log(data)
     }
     fetchData();
   }, []);
@@ -138,11 +139,11 @@ export default function UserPage() {
           'Content-Type': 'application/json',
         },
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to delete record');
       }
-  
+
       // Update the state to remove the deleted record
       setData((prevState) => prevState.filter((record) => record.userId !== id));
     } catch (error) {
@@ -150,8 +151,9 @@ export default function UserPage() {
     }
   }
 
-  const handleOpenMenu = (event) => {
+  const handleOpenMenu = (event, userId) => {
     setOpen(event.currentTarget);
+    setSelected([userId]);
   };
 
   const handleCloseMenu = () => {
@@ -226,38 +228,6 @@ export default function UserPage() {
           </Button> */}
         </Stack>
 
-        {/* <Dialog open={openCreate} onClose={handleClose}>
-        <DialogTitle>เพิ่มโพสต์</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            เพิ่มเนื้อหาโพสต์ ลงในcontent
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="หัวข้อโพสต์"
-            type="email"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="outlined-multiline-static"
-            label="เนื้อหาโพสต์"
-            multiline
-            rows={4}
-            // defaultValue="Default Value"
-            fullWidth
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>ยกเลิก</Button>
-          <Button onClick={handleClose}>โพสต์</Button>
-        </DialogActions>
-        </Dialog> */}
-
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
@@ -305,36 +275,36 @@ export default function UserPage() {
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell> */}
                         <Popover
-        open={Boolean(open)}
-        anchorEl={open}
-        onClose={handleCloseMenu}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        PaperProps={{
-          sx: {
-            p: 1,
-            width: 140,
-            '& .MuiMenuItem-root': {
-              px: 1,
-              typography: 'body2',
-              borderRadius: 0.75,
-            },
-          },
-        }}
-      >
-        <MenuItem>
-          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-          แก้ไข
-        </MenuItem>
+                          open={Boolean(open)}
+                          anchorEl={open}
+                          onClose={handleCloseMenu}
+                          anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                          PaperProps={{
+                            sx: {
+                              p: 1,
+                              width: 140,
+                              '& .MuiMenuItem-root': {
+                                px: 1,
+                                typography: 'body2',
+                                borderRadius: 0.75,
+                              },
+                            },
+                          }}
+                        >
+                          <MenuItem>
+                            <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
+                            แก้ไข
+                          </MenuItem>
 
-        <MenuItem sx={{ color: 'error.main' }} onClick = {() => deleteRecord(userId)}>
-          <Iconify icon={'mdi:restore-from-trash'} sx={{ mr: 2 }} />
-          ลบ
-        </MenuItem>
-      </Popover>
+                          <MenuItem sx={{ color: 'error.main' }} onClick={() => deleteRecord(selected[0])}>
+                            <Iconify icon={'mdi:restore-from-trash'} sx={{ mr: 2 }} />
+                            delete
+                          </MenuItem>
+                        </Popover>
 
                         <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
+                          <IconButton size="large" color="inherit" onClick={(event) => handleOpenMenu(event, userId)}>
                             <Iconify icon={'eva:more-vertical-fill'} />
                           </IconButton>
                         </TableCell>
@@ -387,7 +357,7 @@ export default function UserPage() {
         </Card>
       </Container>
 
-      
+
     </>
   );
 }
