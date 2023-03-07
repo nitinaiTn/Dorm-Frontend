@@ -44,7 +44,7 @@ const TABLE_HEAD = [
   { id: 'property', label: 'ตึก', alignRight: false },
   { id: 'room', label: 'ห้อง', alignRight: false },
   { id: 'date', label: 'วันที่แจ้ง', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
+  { id: 'status', label: 'สถานะการซ่อม', alignRight: false },
   { id: '' },
 ];
 
@@ -248,13 +248,9 @@ export default function UserPage() {
 
                         <TableCell align="left">{dateCreate}</TableCell>
 
-                        <TableCell align="left">{status}</TableCell>
-
-                        {/* <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-
                         <TableCell align="left">
-                          <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
-                        </TableCell> */}
+                          <Label color={status === 'closed'? 'error': status === 'no open' ? 'warning': 'success'}>{status === 'closed'? 'เสร็จสิ้น': status === 'no open' ? 'รออนุมัติ': 'กำลังดำเนินการ'}</Label>
+                        </TableCell>
 
                         <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
