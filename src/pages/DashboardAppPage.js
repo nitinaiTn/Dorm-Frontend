@@ -235,9 +235,6 @@ export default function DashboardAppPage() {
             สวัสดี, {name}
           </Typography>
 
-          <Typography variant="h4" sx={{ mb: 5 }}>
-            {userData? userData.user.username : "Hello"}
-          </Typography>
           {/* <Typography variant="h4" sx={{ mb: 5 }}>
             {formattedDateTime} 
           </Typography> */}
@@ -304,16 +301,16 @@ export default function DashboardAppPage() {
 
           <Grid item xs={12} md={6} lg={4}>
             <AppCurrentVisits
-              title="Current Visits"
+              title="สถานะผู้เช่าปัจจุบัน"
               chartData={[
-                { label: 'America', value: 4344 },
-                { label: 'Asia', value: 5435 },
-                { label: 'Europe', value: 1443 },
-                { label: 'Africa', value: 4443 },
+                { label: 'อาศัยอยู่', value: 4344 },
+                // { label: 'Asia', value: 5435 },
+                { label: 'ติดจอง', value: 1443 },
+                { label: 'ออก', value: 1550 },
               ]}
               chartColors={[
                 theme.palette.primary.main,
-                theme.palette.info.main,
+                // theme.palette.info.main,
                 theme.palette.warning.main,
                 theme.palette.error.main,
               ]}
