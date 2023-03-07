@@ -43,8 +43,8 @@ const TABLE_HEAD = [
   { id: 'property', label: 'ตึก', alignRight: false },
   { id: 'floor', label: 'ชั้น', alignRight: false },
   { id: 'room', label: 'ห้อง', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
+  { id: 'role', label: 'สิทธิ', alignRight: false },
+  { id: 'status', label: 'สถานะอาศัย', alignRight: false },
   { id: '' },
 ];
 
@@ -269,11 +269,12 @@ export default function UserPage() {
 
                         <TableCell align="left">{room}</TableCell>
 
-                        <TableCell align="left">{role}</TableCell>
+                        <TableCell align="left">{role === 'owner'? 'ผู้ดูแลระบบ': 'ผู้เช่า'}</TableCell>
 
-                        {/* <TableCell align="left">
-                          <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
-                        </TableCell> */}
+                        <TableCell align="left">
+                          <Label color={status === 'owned' ?'error' : 'success'}>{(status) === 'owned'? 'owned' : status}</Label>
+                        </TableCell>
+                        
                         <Popover
                           open={Boolean(open)}
                           anchorEl={open}
