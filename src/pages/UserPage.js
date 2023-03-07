@@ -381,7 +381,7 @@ export default function UserPage() {
         </MenuItem>
 
         <MenuItem sx={{ color: 'error.main' }} onClick = {() => deleteRecord()}>
-          <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
+          <Iconify icon={'mdi:restore-from-trash'} sx={{ mr: 2 }} />
           ลบ
         </MenuItem>
       </Popover>

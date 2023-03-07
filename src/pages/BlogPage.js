@@ -105,7 +105,7 @@ export default function BlogPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Blog | Minimal UI </title>
+        <title>แจ้งข่าวสาร </title>
       </Helmet>
 
       <Container>
@@ -114,7 +114,7 @@ export default function BlogPage() {
             แจ้งข่าวสาร
           </Typography>
           <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleClickOpen}>
-            New Post
+            สร้างโพสต์ใหม่
           </Button>
         </Stack>
 

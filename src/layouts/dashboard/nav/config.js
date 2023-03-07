@@ -29,12 +29,12 @@ const navConfig = [
   {
     title: 'แจ้งซ่อม',
     path: '/dashboard/maintain',
-    icon: icon('ic_lock'),
+    icon: icon('ic_maintanance'),
   },
   {
     title: 'ตั้งค่าหอพัก',
     path: '/dashboard/setting',
-    icon: icon('ic_lock'),
+    icon: icon('ic_building'),
   },
   // {
   //   title: 'login',
