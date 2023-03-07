@@ -129,9 +129,10 @@ export default function UserPage() {
     room: item.room_number,
   }));
 
-  async function deleteRecord() {
+  async function deleteRecord(id) {
     try {
-      const response = await fetch(`https://your-api-endpoint.com/records/134`, {
+      console.log(id)
+      const response = await fetch(`https://dorm-api.vercel.app/api/user/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -143,7 +144,7 @@ export default function UserPage() {
       }
   
       // Update the state to remove the deleted record
-      // setData((prevState) => prevState.filter((record) => record.id !== id));
+      setData((prevState) => prevState.filter((record) => record.userId !== id));
     } catch (error) {
       console.error(error);
     }
@@ -172,11 +173,11 @@ export default function UserPage() {
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -185,6 +186,7 @@ export default function UserPage() {
       newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
     }
     setSelected(newSelected);
+    deleteRecord(id);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -302,6 +304,34 @@ export default function UserPage() {
                         {/* <TableCell align="left">
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell> */}
+                        <Popover
+        open={Boolean(open)}
+        anchorEl={open}
+        onClose={handleCloseMenu}
+        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        PaperProps={{
+          sx: {
+            p: 1,
+            width: 140,
+            '& .MuiMenuItem-root': {
+              px: 1,
+              typography: 'body2',
+              borderRadius: 0.75,
+            },
+          },
+        }}
+      >
+        <MenuItem>
+          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
+          แก้ไข
+        </MenuItem>
+
+        <MenuItem sx={{ color: 'error.main' }} onClick = {() => deleteRecord(userId)}>
+          <Iconify icon={'mdi:restore-from-trash'} sx={{ mr: 2 }} />
+          ลบ
+        </MenuItem>
+      </Popover>
 
                         <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
@@ -357,34 +387,7 @@ export default function UserPage() {
         </Card>
       </Container>
 
-      <Popover
-        open={Boolean(open)}
-        anchorEl={open}
-        onClose={handleCloseMenu}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        PaperProps={{
-          sx: {
-            p: 1,
-            width: 140,
-            '& .MuiMenuItem-root': {
-              px: 1,
-              typography: 'body2',
-              borderRadius: 0.75,
-            },
-          },
-        }}
-      >
-        <MenuItem>
-          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-          แก้ไข
-        </MenuItem>
-
-        <MenuItem sx={{ color: 'error.main' }} onClick = {() => deleteRecord()}>
-          <Iconify icon={'mdi:restore-from-trash'} sx={{ mr: 2 }} />
-          ลบ
-        </MenuItem>
-      </Popover>
+      
     </>
   );
 }
