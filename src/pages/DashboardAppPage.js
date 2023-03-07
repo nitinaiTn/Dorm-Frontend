@@ -114,9 +114,20 @@ export default function DashboardAppPage() {
 
   const [utilitydata, setUtilityData] = useState([]);
 
+  const [roomData, setRoomData] = useState([]);
+
   const {userData} = useContext(UserContext)
   
   useEffect(() => {
+    async function fetchRoom() {
+      console.log(userData)
+      const res = await fetch(`https://dorm-api.vercel.app/api/room/${userData.user.property_id}`);
+      const data = await res.json();
+      setRoomData(data);
+      console.log(roomData)
+    }
+    fetchRoom();
+
     async function fetchUtility() {
       const res = await fetch("https://dorm-api.vercel.app/api/utility");
       const data = await res.json();
@@ -134,6 +145,13 @@ export default function DashboardAppPage() {
     fetchData();
     
   }, []);
+
+     // Check if userData has been initialized before rendering the component
+     if (!userData) {
+      return null; // or some other fallback component
+    }
+  
+    const { name, lastname, email } = userData.user;
 
   const maintainLIST = data.map(item => ({
     id: item.request_id,
@@ -202,6 +220,7 @@ export default function DashboardAppPage() {
   const filteredUsers = applySortFilter(maintainLIST, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
+  
 
   return (
     <>
@@ -213,7 +232,7 @@ export default function DashboardAppPage() {
 
         <Stack direction={'row'} sx={{justifyContent: 'space-between'}}>
           <Typography variant="h4" sx={{ mb: 5 }}>
-            สวัสดี, ยินดีต้องรับกลับ
+            สวัสดี, {name}
           </Typography>
 
           <Typography variant="h4" sx={{ mb: 5 }}>
@@ -344,7 +363,7 @@ export default function DashboardAppPage() {
                     สถานะห้อง
                   </Typography>
                   <Typography variant="h6" sx={{ my: 2, mr: 3 }}>
-                    ห้องทั้งหมด : 40 ห้องว่าง : 33
+                    ห้องทั้งหมด : {roomData.length} ห้องว่าง : {roomData.filter(room => room.room_status === 'free').length}
                   </Typography>
                  </Stack>
 
