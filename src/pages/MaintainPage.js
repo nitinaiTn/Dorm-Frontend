@@ -192,7 +192,7 @@ export default function UserPage() {
   return (
     <>
       <Helmet>
-        <title> Maintain | Minimal UI </title>
+        <title> แจ้งซ่อม </title>
       </Helmet>
 
       <Container>
@@ -281,13 +281,13 @@ export default function UserPage() {
                           }}
                         >
                           <Typography variant="h6" paragraph>
-                            Not found
+                            ไม่มีข้อมูลให้แสดง
                           </Typography>
 
                           <Typography variant="body2">
-                            No results found for &nbsp;
+                            ไม่พบข้อมูล &nbsp;
                             <strong>&quot;{filterName}&quot;</strong>.
-                            <br /> Try checking for typos or using complete words.
+                            <br /> โปรดป้อนข้อมูลที่ต้องการค้นหาใหม่อีกครั้ง
                           </Typography>
                         </Paper>
                       </TableCell>
@@ -329,7 +329,7 @@ export default function UserPage() {
         }}
       >
         <MenuItem>
-          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
+          <Iconify icon={'ph:magnifying-glass-bold'} sx={{ mr: 2 }} />
           ดูรายละเอียด
         </MenuItem>
 
