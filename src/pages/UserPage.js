@@ -153,9 +153,10 @@ export default function UserPage() {
       if (!response.ok) {
         throw new Error('Failed to delete record');
       }
-
+      
       // Update the state to remove the deleted record
       setData((prevState) => prevState.filter((record) => record.userId !== id));
+      // setData([])
       handleCloseDelete()
     } catch (error) {
       console.error(error);
