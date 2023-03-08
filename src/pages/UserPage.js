@@ -96,12 +96,22 @@ export default function UserPage() {
 
   const [openCreate, setOpenCreate] = useState(false)
 
+  const [openDelete, setOpenDelete] = useState(false)
+
   const handleClickOpen = () => {
     setOpenCreate(true)
   }
 
   const handleClose = () => {
     setOpenCreate(false)
+  }
+
+  const handleClickOpenDelete = () => {
+    setOpenDelete(true)
+  }
+
+  const handleCloseDelete = () => {
+    setOpenDelete(false)
   }
 
   const [loading, setLoading] = useState(false)
@@ -146,6 +156,7 @@ export default function UserPage() {
 
       // Update the state to remove the deleted record
       setData((prevState) => prevState.filter((record) => record.userId !== id));
+      handleCloseDelete()
     } catch (error) {
       console.error(error);
     }
@@ -228,6 +239,29 @@ export default function UserPage() {
           </Button> */}
         </Stack>
 
+        <Dialog
+        open={openDelete}
+        onClose={handleCloseDelete}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title" color="error">
+          {"ต้องการลบผู้ใช้งานนี้ใชไหม?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            หากต้องการลบผู้ใช้นี้กรุณากดลบ
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleCloseDelete}>
+            ยกเลิก
+          </Button>
+          <Button onClick={() => deleteRecord(selected[0])}  autoFocus color="error">
+            ลบ
+          </Button>
+        </DialogActions>
+      </Dialog>
+
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
@@ -298,7 +332,7 @@ export default function UserPage() {
                             แก้ไข
                           </MenuItem>
 
-                          <MenuItem sx={{ color: 'error.main' }} onClick={() => deleteRecord(selected[0])}>
+                          <MenuItem sx={{ color: 'error.main' }} onClick={() => handleClickOpenDelete()}>
                             <Iconify icon={'mdi:restore-from-trash'} sx={{ mr: 2 }} />
                             delete
                           </MenuItem>
