@@ -15,13 +15,15 @@ import React, { useEffect, useState } from 'react';
 function EditUserPage() {
   const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState({ user_id: '', post_title: '', post_text: ''});
+  const [key, setKey] = useState(0); // add key state variable
 
   useEffect(() => {
     // Fetch the list of posts when the component mounts
     fetch('https://dorm-api.vercel.app/api/post')
       .then((response) => response.json())
-      .then((data) => setPosts(data));
-  }, [posts]);
+      .then((data) => setPosts(data))
+      .then(() => {console.log('Succec fetch')})
+  }, [key]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -45,6 +47,7 @@ function EditUserPage() {
         setPosts([...posts, data]);
         // Clear the form fields
         setNewPost({ user_id: '', post_title: '', post_text: ''});
+        setKey((prevKey) => prevKey + 1); // update key to force refresh
       });
   };
 
