@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
-import {useNavigate } from 'react-router-dom';
+import {useNavigate, Link as RouterLink } from 'react-router-dom';
+
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
@@ -124,7 +125,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={() => { handleClose(); navigate('', { replace: true }); }} sx={{ m: 1 }}>
+        <MenuItem to = "/" component = {RouterLink} sx={{ m: 1 }}  >
           ออกจากระบบ
         </MenuItem>
       </Popover>

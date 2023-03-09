@@ -11,6 +11,7 @@ import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
 import MaintainPage from './pages/MaintainPage'
 import Setting from './pages/Setting'
+import EditUserPage from './pages/EditUserPage';
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +23,12 @@ export default function Router() {
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'app', element: <DashboardAppPage /> },
-        { path: 'user', element: <UserPage /> },
+        { path: 'user',
+          element: <UserPage />,
+          children: [
+            {path: 'editUser', element: <EditUserPage/>}
+          ]
+        },
         { path: 'products', element: <ProductsPage /> },
         { path: 'blog', element: <BlogPage /> },
         { path: 'maintain', element: <MaintainPage /> },
