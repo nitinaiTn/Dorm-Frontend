@@ -4,7 +4,8 @@ import { faker } from '@faker-js/faker';
 import { filter } from 'lodash';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Grid,
+import {
+  Grid,
   Card,
   Table,
   Stack,
@@ -25,8 +26,8 @@ import { Grid,
   TextField,
   Dialog,
   DialogActions,
-  DialogContent, 
-  DialogContentText, 
+  DialogContent,
+  DialogContentText,
   DialogTitle,
   TableHead
 } from '@mui/material';
@@ -52,8 +53,8 @@ import { UserContext } from '../App';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'room', label: 'ห้อง', alignRight: false },
   { id: 'property', label: 'ตึก', alignRight: false },
+  { id: 'room', label: 'ห้อง', alignRight: false },
   { id: 'name', label: 'ชื่อผู้พักอาศัย', alignRight: false },
   { id: 'status', label: 'สถานะห้อง', alignRight: false },
   { id: 'cost', label: 'ค่าที่พักรายเดือน', alignRight: false },
@@ -116,52 +117,61 @@ export default function DashboardAppPage() {
 
   const [roomData, setRoomData] = useState([]);
 
-  const {userData} = useContext(UserContext)
-  
+  const { userData } = useContext(UserContext)
+
   useEffect(() => {
     async function fetchRoom() {
-      console.log(userData)
-      const res = await fetch(`https://dorm-api.vercel.app/api/room/${userData.user.property_id}`);
-      const data = await res.json();
-      setRoomData(data);
-      console.log(roomData)
+      try {
+        const res = await fetch(`https://dorm-api.vercel.app/api/room/${userData.user.property_id}`);
+        const data = await res.json();
+        setRoomData(data);
+      } catch (error) {
+        console.error("Error fetching room data:", error);
+      }
     }
     fetchRoom();
 
     async function fetchUtility() {
-      const res = await fetch("https://dorm-api.vercel.app/api/utility");
-      const data = await res.json();
-      setUtilityData(data);
-      console.log(data)
+      try {
+        const res = await fetch("https://dorm-api.vercel.app/api/utility");
+        const data = await res.json();
+        setUtilityData(data);
+      } catch (error) {
+        console.error("Error fetching utility data:", error);
+      }
     }
     fetchUtility();
 
     async function fetchData() {
-      const res = await fetch("https://dorm-api.vercel.app/api/bill");
-      const data = await res.json();
-      setData(data);
-      console.log(data)
+      try {
+        const res = await fetch("https://dorm-api.vercel.app/api/bill");
+        const data = await res.json();
+        setData(data);
+      } catch (error) {
+        console.error("Error fetching bill data:", error);
+      }
     }
     fetchData();
-    
+
   }, []);
 
-     // Check if userData has been initialized before rendering the component
-     if (!userData) {
-      return null; // or some other fallback component
-    }
-  
-    const { name, lastname, email } = userData.user;
+  // Check if userData has been initialized before rendering the component
+  if (!userData) {
+    return null; // or some other fallback component
+  }
 
-  const maintainLIST = data.map(item => ({
-    id: item.request_id,
-    userID: item.user_id,
-    name: item.name,
-    lastName: item.lastName,
-    status: item.request_status,
-    property: item.property_id,
-    room: item.room_id,
+  const { name, lastname, email } = userData.user;
+
+  const roomLIST = roomData.map(item => ({
+    roomID: item.room_id,
+    propertyID: item.property_id,
+    roomNumber: item.room_number,
+    roomStatus: item.room_status,
+    username: item.username,
+    roomPrice: item.room_price
   }));
+
+  console.log(roomLIST)
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -179,7 +189,7 @@ export default function DashboardAppPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = maintainLIST.map((n) => n.name);
+      const newSelecteds = roomLIST.map((n) => n.room_id);
       setSelected(newSelecteds);
       return;
     }
@@ -215,12 +225,12 @@ export default function DashboardAppPage() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - maintainLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - roomLIST.length) : 0;
 
-  const filteredUsers = applySortFilter(maintainLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(roomLIST, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
-  
+
 
   return (
     <>
@@ -230,7 +240,7 @@ export default function DashboardAppPage() {
 
       <Container maxWidth="xl">
 
-        <Stack direction={'row'} sx={{justifyContent: 'space-between'}}>
+        <Stack direction={'row'} sx={{ justifyContent: 'space-between' }}>
           <Typography variant="h4" sx={{ mb: 5 }}>
             สวัสดี, {name}
           </Typography>
@@ -356,13 +366,13 @@ export default function DashboardAppPage() {
                 
               </TableHead> */}
               <Stack direction="row" alignItems="center" justifyContent="space-between">
-                  <Typography variant="h6" sx={{ my: 2, ml: 3 }}>
-                    สถานะห้อง
-                  </Typography>
-                  <Typography variant="h6" sx={{ my: 2, mr: 3 }}>
-                    ห้องทั้งหมด : {roomData.length} ห้องว่าง : {roomData.filter(room => room.room_status === 'free').length}
-                  </Typography>
-                 </Stack>
+                <Typography variant="h6" sx={{ my: 2, ml: 3 }}>
+                  สถานะห้อง
+                </Typography>
+                <Typography variant="h6" sx={{ my: 2, mr: 3 }}>
+                  ห้องทั้งหมด : {roomData.length} ห้องว่าง : {roomData.filter(room => room.room_status === 'free').length}
+                </Typography>
+              </Stack>
 
               <Scrollbar>
                 <TableContainer sx={{ minWidth: 800 }}>
@@ -371,22 +381,22 @@ export default function DashboardAppPage() {
                       order={order}
                       orderBy={orderBy}
                       headLabel={TABLE_HEAD}
-                      rowCount={maintainLIST.length}
+                      rowCount={roomLIST.length}
                       numSelected={selected.length}
                       onRequestSort={handleRequestSort}
                       onSelectAllClick={handleSelectAllClick}
                     />
                     <TableBody>
                       {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                        const { id, requestText, userID, name, lastName, status, property, room} = row;
+                        const { roomID, username, roomPrice, roomStatus, propertyID, roomNumber } = row;
                         const selectedUser = selected.indexOf(name) !== -1;
 
                         return (
-                          <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
+                          <TableRow hover key={roomID} tabIndex={-1} role="checkbox" selected={selectedUser}>
                             <TableCell padding="checkbox">
                               {/* <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} /> */}
                             </TableCell>
-{/* 
+                            {/* 
                             <TableCell component="th" scope="row" padding="none">
                               <Stack direction="row" alignItems="center" spacing={2}>
                                 <Avatar alt={name} src={avatarUrl} />
@@ -395,16 +405,15 @@ export default function DashboardAppPage() {
                                 </Typography>
                               </Stack>
                             </TableCell> */}
+                            <TableCell align="left">{propertyID}</TableCell>
 
-                            <TableCell align="left">{room}</TableCell>
+                            <TableCell align="left">{roomNumber}</TableCell>
+                            
+                            <TableCell align="left">{username}</TableCell>
 
-                            <TableCell align="left">{property}</TableCell>
+                            <TableCell align="left">{roomStatus}</TableCell>
 
-                            <TableCell align="left">{name} {lastName}</TableCell>
-
-                            <TableCell align="left">{status}</TableCell>
-
-                            <TableCell align="left">{property}</TableCell>
+                            <TableCell align="left">{roomPrice}</TableCell>
 
                             {/* <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
 
@@ -412,7 +421,7 @@ export default function DashboardAppPage() {
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell> */}
 
-                            <TableCell align="right">
+                            <TableCell align="left">
                               <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
                                 <Iconify icon={'eva:more-vertical-fill'} />
                               </IconButton>
@@ -457,7 +466,7 @@ export default function DashboardAppPage() {
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
-                count={maintainLIST.length}
+                count={roomLIST.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
