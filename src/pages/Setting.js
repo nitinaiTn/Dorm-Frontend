@@ -20,6 +20,8 @@ export default function ProductsPage() {
   const [key, setKey] = useState(0); // add key state variable
   const [postToEdit, setPostToEdit] = useState(null);
   const [postToDelete, setPostToDelete] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const { userData } = useContext(UserContext)
 
   useEffect(() => {
@@ -30,11 +32,11 @@ export default function ProductsPage() {
       .then(() => { console.log('Succec fetch') })
   }, [key]);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = () => {
+    // event.preventDefault();
     // Create a new post object with the provided title and content
+    console.log(newPost)
     const post = {
-      property_id: newPost.property_id,
       owner_id: newPost.owner_id,
       address: "711/33 moo 8 ",
       number_of_floors: newPost.number_of_floors,
@@ -45,7 +47,7 @@ export default function ProductsPage() {
       Unit_bath_elect: newPost.Unit_bath_elect
     };
     // Send a POST request to the create post endpoint
-    fetch('https://dorm-api.vercel.app/api/post', {
+    fetch('https://dorm-api.vercel.app/api/property', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -59,28 +61,35 @@ export default function ProductsPage() {
         // Clear the form fields
         setNewPost({ user_id: '', post_title: '', post_text: '' });
         setKey((prevKey) => prevKey + 1); // update key to force refresh
-      });
+        console.log("Create Done")
+      })
+      .catch(error => console.error(error));
+    setIsDialogOpen(false)
   };
 
-  const handleDelete = (propertyId) => {
-    // Send a DELETE request to the API endpoint
-    fetch(`https://dorm-api.vercel.app/api/property/${propertyId}`, {
-      method: 'DELETE',
-    })
-      .then((response) => response.json())
-      .then(() => {
-        // Remove the deleted post from the posts state
-        const updatedPosts = posts.filter(post => post.property_id !== propertyId);
-        setPosts(updatedPosts);
-      })
-      .catch((error) => {
-        console.error('Error deleting post:', error);
-      });
-  }
+  // const handleDelete = (propertyId) => {
+  //   // Send a DELETE request to the API endpoint
+  //   fetch(`https://dorm-api.vercel.app/api/property/${propertyId}`, {
+  //     method: 'DELETE',
+  //   })
+  //     .then((response) => response.json())
+  //     .then(() => {
+  //       // Remove the deleted post from the posts state
+  //       const updatedPosts = posts.filter(post => post.property_id !== propertyId);
+  //       setPosts(updatedPosts);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error deleting post:', error);
+  //     });
+  // }
 
-  const handleEditSubmit = (event) => {
-    event.preventDefault();
-  
+  const handleEditClick = (post) => {
+    setPostToEdit(post);
+  };
+
+  const handleEditSubmit = () => {
+    // event.preventDefault();
+    console.log(postToEdit)
     fetch(`https://dorm-api.vercel.app/api/property/${postToEdit.property_id}`, {
       method: 'PUT',
       headers: {
@@ -96,6 +105,7 @@ export default function ProductsPage() {
         );
         setPosts(updatedPosts);
         setPostToEdit(null);
+        console.log("Edit Succes")
       })
       .catch((error) => console.log(error));
   };
@@ -125,6 +135,13 @@ export default function ProductsPage() {
   const { name, lastname, email, userID } = userData.user;
   console.log(userData.user)
 
+  const meterStateList = [
+    { value: 'AdminAll', label: 'มิเตอร์น้ำ มิเตอร์ไฟ จัดการโดยผู้ดูแลทั้งหมด' },
+    { value: 'waterAdmin_elecUser', label: 'มิเตอร์น้ำ จัดการโดยผู้ดูแล มิเตอร์ไฟ จัดการโดยผู้ใช้งาน' },
+    { value: 'waterUser_elecAdmin', label: 'มิเตอร์น้ำ จัดการโดยผู้ใช้งาน มิเตอร์ไฟ จัดการโดยผู้ดูแล' },
+    { value: 'UserAll', label: 'มิเตอร์น้ำ มิเตอร์ไฟ จัดการโดยผู้ใช้งานทั้งหมด' },
+  ];
+
   return (
     <div>
       <Container maxWidth="xl">
@@ -132,73 +149,220 @@ export default function ProductsPage() {
           ตั้งค่าหอพัก
         </Typography>
 
-        <Button variant="outlined" sx={{ mb: 3 }}>create</Button>
+        <Button variant="outlined" sx={{ mb: 3 }} onClick={() => setIsDialogOpen(true)}>create</Button>
+
+        <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
+          <DialogTitle>สร้างหอพักใหม่</DialogTitle>
+          <DialogContent>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  label="Owner ID"
+                  value={newPost.owner_id}
+                  onChange={(e) => setNewPost({ ...newPost, owner_id: e.target.value })}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  label="จำนวนชั้น"
+                  value={newPost.number_of_floors}
+                  onChange={(e) => setNewPost({ ...newPost, number_of_floors: e.target.value })}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  label="จำนวนห้อง"
+                  value={newPost.number_of_rooms}
+                  onChange={(e) => setNewPost({ ...newPost, number_of_rooms: e.target.value })}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel id="meter-state-label">สถานะมิตเตอร์</InputLabel>
+                <Select
+                  labelId="meter-state-label"
+                  value={newPost.meter_state}
+                  onChange={(e) => setNewPost({ ...newPost, meter_state: e.target.value })}
+                  fullWidth
+                >
+                  {meterStateList.map((id) => (
+                    <MenuItem key={id.value} value={id.value}>
+                      {id.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {/* <TextField
+                    required
+                    fullWidth
+                    label="Meter state"
+                    value={newPost.meter_state}
+                    onChange={(e) => setNewPost({ ...newPost, meter_state: e.target.value })}
+                  /> */}
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  label="หน่วยค่าน้ำ"
+                  value={newPost.Unit_bath_water}
+                  onChange={(e) => setNewPost({ ...newPost, Unit_bath_water: e.target.value })}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  label="หน่วยค่าไฟ"
+                  value={newPost.Unit_bath_elect}
+                  onChange={(e) => setNewPost({ ...newPost, Unit_bath_elect: e.target.value })}
+                />
+              </Grid>
+            </Grid>
+            <DialogActions>
+              <Button onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+              <Button onClick={() => handleSubmit()} color="primary">
+                Create
+              </Button>
+            </DialogActions>
+          </DialogContent>
+        </Dialog>
 
         <Dialog open={Boolean(postToEdit)} onClose={() => setPostToEdit(null)}>
           <DialogTitle>Edit Post</DialogTitle>
           <DialogContent>
-            <form onSubmit={handleEditSubmit}>
-              <TextField
-                label="Property ID"
-                value={postToEdit?.property_id || ''}
-                onChange={(e) =>
-                  setPostToEdit((prev) => ({ ...prev, property_id: e.target.value }))
-                }
-                fullWidth
-                required
-              />
-              <TextField
-                label="Number of Floors"
-                value={postToEdit?.number_of_floors || ''}
-                onChange={(e) =>
-                  setPostToEdit((prev) => ({ ...prev, number_of_floors: e.target.value }))
-                }
-                fullWidth
-                required
-              />
-              <TextField
-                label="Number of Rooms"
-                value={postToEdit?.number_of_rooms || ''}
-                onChange={(e) =>
-                  setPostToEdit((prev) => ({ ...prev, number_of_rooms: e.target.value }))
-                }
-                fullWidth
-                required
-              />
-              <TextField
-                label="Meter State"
-                value={postToEdit?.meter_state || ''}
-                onChange={(e) =>
-                  setPostToEdit((prev) => ({ ...prev, meter_state: e.target.value }))
-                }
-                fullWidth
-                required
-              />
-              <TextField
-                label="Unit Bath Water"
-                value={postToEdit?.Unit_bath_water || ''}
-                onChange={(e) =>
-                  setPostToEdit((prev) => ({ ...prev, Unit_bath_water: e.target.value }))
-                }
-                fullWidth
-                required
-              />
-              <TextField
-                label="Unit Bath Elect"
-                value={postToEdit?.Unit_bath_elect || ''}
-                onChange={(e) =>
-                  setPostToEdit((prev) => ({ ...prev, Unit_bath_elect: e.target.value }))
-                }
-                fullWidth
-                required
-              />
-              <DialogActions>
-                <Button onClick={() => setPostToEdit(null)}>Cancel</Button>
-                <Button type="submit">Save</Button>
-              </DialogActions>
-            </form>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  label="Property ID"
+                  variant="outlined"
+                  fullWidth
+                  value={postToEdit?.property_id || ''}
+                  onChange={(event) =>
+                    setPostToEdit({
+                      ...postToEdit,
+                      property_id: event.target.value,
+                    })
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Owner ID"
+                  variant="outlined"
+                  fullWidth
+                  value={postToEdit?.owner_id || ''}
+                  onChange={(event) =>
+                    setPostToEdit({
+                      ...postToEdit,
+                      owner_id: event.target.value,
+                    })
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="จำนวนชั้น"
+                  variant="outlined"
+                  fullWidth
+                  value={postToEdit?.number_of_floors || ''}
+                  onChange={(event) =>
+                    setPostToEdit({
+                      ...postToEdit,
+                      number_of_floors: event.target.value,
+                    })
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="จำนวนห้อง"
+                  variant="outlined"
+                  fullWidth
+                  value={postToEdit?.number_of_rooms || ''}
+                  onChange={(event) =>
+                    setPostToEdit({
+                      ...postToEdit,
+                      number_of_rooms: event.target.value,
+                    })
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel variant="h1">สถานะมิตเตอร์</InputLabel>
+                <Select
+                  fullWidth
+                  value={postToEdit?.meter_state || ''}
+                  onChange={(event) =>
+                    setPostToEdit({
+                      ...postToEdit,
+                      meter_state: event.target.value,
+                    })
+                  }
+                >
+                  {meterStateList.map((id) => (
+                    <MenuItem key={id.value} value={id.value}>
+                      {id.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {/* <TextField
+                    label="สถานะมิตเตอร์"
+                    variant="outlined"
+                    fullWidth
+                    value={postToEdit?.meter_state || ''}
+                    onChange={(event) =>
+                      setPostToEdit({
+                        ...postToEdit,
+                        meter_state: event.target.value,
+                      })
+                    }
+                  /> */}
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="หน่วยค่าน้ำ"
+                  variant="outlined"
+                  fullWidth
+                  value={postToEdit?.Unit_bath_water || ''}
+                  onChange={(event) =>
+                    setPostToEdit({
+                      ...postToEdit,
+                      Unit_bath_water: event.target.value,
+                    })
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="หน่วยค่าไฟฟ้า"
+                  variant="outlined"
+                  fullWidth
+                  value={postToEdit?.Unit_bath_elect || ''}
+                  onChange={(event) =>
+                    setPostToEdit({
+                      ...postToEdit,
+                      Unit_bath_elect: event.target.value,
+                    })
+                  }
+                />
+              </Grid>
+            </Grid>
+
+            <DialogActions>
+              <Button onClick={() => setPostToEdit(null)}>ยกเลิก</Button>
+              <Button onClick={() => handleEditSubmit()} variant="contained">
+                บันทึก
+              </Button>
+            </DialogActions>
+
           </DialogContent>
         </Dialog>
+
 
         <Dialog
           open={Boolean(postToDelete)}
@@ -241,7 +405,7 @@ export default function ProductsPage() {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button size="small" onClick={() => setPostToEdit(post)}>Edit</Button>
+                  <Button size="small" color="primary" onClick={() => handleEditClick(post)}>Edit</Button>
                   <Button size="small" color="error" onClick={() => handleDeleteClick(post.property_id)}>Delete</Button>
                 </CardActions>
               </Card>
