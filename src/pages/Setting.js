@@ -233,7 +233,7 @@ export default function ProductsPage() {
         </Dialog>
 
         <Dialog open={Boolean(postToEdit)} onClose={() => setPostToEdit(null)}>
-          <DialogTitle>Edit Post</DialogTitle>
+          <DialogTitle>แก้ไขหอพัก</DialogTitle>
           <DialogContent>
             <Grid container spacing={2}>
               <Grid item xs={12}>

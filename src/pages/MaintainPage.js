@@ -24,9 +24,12 @@ import {
   TextField,
   Dialog,
   DialogActions,
-  DialogContent, 
-  DialogContentText, 
-  DialogTitle
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Select,
+  InputLabel,
+  Grid
 } from '@mui/material';
 // components
 import Label from '../components/label';
@@ -94,9 +97,17 @@ export default function UserPage() {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  const [ToDetail, setToDetail] = useState(null);
+
+  const [ToEdit, setToEdit] = useState(null);
+
+  const [ToDelete, setToDelete] = useState(null);
+
   const [openCreate, setOpenCreate] = useState(false)
 
-  const handleClickOpen = () =>{
+  // const [stateData, setStateData] = useState({ name: '', request_text: '', dateCreate: '', status: '', property: '', room: ''});
+
+  const handleClickOpen = () => {
     setOpenCreate(true)
   }
 
@@ -126,12 +137,22 @@ export default function UserPage() {
     status: item.request_status,
     property: item.property_id,
     room: item.room_id,
+    requestTitle: item.request_title,
     requestText: item.request_text,
     dateCreate: item.date_created,
+    imageURL: item.imageURL
   }));
 
-  const handleOpenMenu = (event) => {
+  const maintainStateList = [
+    { value: 'no open', label: 'รออนุมัติ' },
+    { value: 'closed', label: 'เสร็จสิ้น' },
+    { value: 'in progress', label: 'กำลังดำเนินการ' },
+  ];
+
+  const handleOpenMenu = (event, id, name, requestTitle, requestText, dateCreate, imageURL) => {
     setOpen(event.currentTarget);
+    setSelected([id, name, requestTitle, requestText, dateCreate, imageURL]);
+    console.log(selected)
   };
 
   const handleCloseMenu = () => {
@@ -182,6 +203,66 @@ export default function UserPage() {
     setFilterName(event.target.value);
   };
 
+  const handleDetailClick = (id) => {
+    console.log(id)
+    setToDetail(id);
+  };
+
+  const imageUrlss = "http://res.cloudinary.com/dklgtawp3/image/upload/v1678914622/Dorm/1678914619531.jpg"
+
+  const handleDetailConfirm = () => {
+    // fetch(`https://dorm-api.vercel.app/api/maintenance/${ToDelete}`, {
+    //   method: 'DELETE'
+    // })
+    //   .then(() => {
+    //     // Close the dialog
+    //     setToDelete(null);
+    //   })
+    //   .catch(error => console.error(error));
+  };
+
+  const handleEditClick = (id) => {
+    setToEdit(id);
+  };
+
+  const handleEditSubmit = () => {
+    // event.preventDefault();
+    const status = {
+      status: ToEdit.meter_state
+    }
+    console.log(status)
+    fetch(`https://dorm-api.vercel.app/api/maintenance/updateStatus/${selected[0]}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(status),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setToEdit(null);
+        console.log("Edit Succes")
+      })
+      .catch((error) => console.log(error));
+  };
+
+
+  const handleDeleteClick = (id) => {
+    console.log(id)
+    setToDelete(id);
+  };
+
+  const handleDeleteConfirm = () => {
+    fetch(`https://dorm-api.vercel.app/api/maintenance/${ToDelete}`, {
+      method: 'DELETE'
+    })
+      .then(() => {
+        // Close the dialog
+        setToDelete(null);
+      })
+      .catch(error => console.error(error));
+  };
+
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - maintainLIST.length) : 0;
 
   const filteredUsers = applySortFilter(maintainLIST, getComparator(order, orderBy), filterName);
@@ -194,6 +275,96 @@ export default function UserPage() {
       <Helmet>
         <title> แจ้งซ่อม </title>
       </Helmet>
+
+      <Dialog
+        open={Boolean(ToDetail)}
+        onClose={() => setToDetail(null)}
+      >
+        <DialogTitle>รายละเอียดปัญหา</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            หัวเรื่องปัญหา {selected[2]}
+          </DialogContentText>
+          <DialogContentText>
+            เนื้อหาปัญหา {selected[3]}
+          </DialogContentText>
+          <DialogContentText>
+            วันที่แจ้ง {selected[4]}
+          </DialogContentText>
+          <DialogContentText>
+            ชื่อผู้แจ้ง {selected[1]}
+          </DialogContentText>
+          <img
+            src={selected[5]}
+            alt="new"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setToDetail(null)}>Done</Button>
+          {/* <Button onClick={handleDeleteConfirm} color="error">ลบ</Button> */}
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={Boolean(ToEdit)} onClose={() => setToEdit(null)}>
+        <DialogTitle>เลือกสถานะการซ่อม</DialogTitle>
+        <DialogContent>
+          <Grid container spacing={2}>
+            {/* <Grid item xs={12}>
+              <TextField
+                label="Property ID"
+                variant="outlined"
+                fullWidth
+                onChange={(event) =>
+                  setToEdit({
+                    property_id: event.target.value,
+                  })
+                }
+              />
+            </Grid> */}
+            <Grid item xs={12}>
+              <InputLabel variant="h1">สถานะการซ่อม</InputLabel>
+              <Select
+                fullWidth
+                onChange={(event) =>
+                  setToEdit({
+                    meter_state: event.target.value,
+                  })
+                }
+              >
+                {maintainStateList.map((id) => (
+                  <MenuItem key={id.value} value={id.value}>
+                    {id.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Grid>
+          </Grid>
+
+          <DialogActions>
+            <Button onClick={() => setToEdit(null)}>ยกเลิก</Button>
+            <Button onClick={() => handleEditSubmit()} variant="contained">
+              บันทึก
+            </Button>
+          </DialogActions>
+        </DialogContent>
+      </Dialog>
+
+
+      <Dialog
+        open={Boolean(ToDelete)}
+        onClose={() => setToDelete(null)}
+      >
+        <DialogTitle>ลบรายการแจ้งซ่อม?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            คุณแน่ใจว่าต้องการลบรายการแจ้งซ่อมนี้ไหม?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setToDelete(null)}>ยกเลิก</Button>
+          <Button onClick={handleDeleteConfirm} color="error">ลบ</Button>
+        </DialogActions>
+      </Dialog>
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
@@ -222,7 +393,7 @@ export default function UserPage() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, requestText , userID, name, lastName, status, property, room, dateCreate } = row;
+                    const { id, requestTitle, requestText, userID, name, lastName, status, property, room, dateCreate, imageURL } = row;
                     const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
@@ -249,11 +420,11 @@ export default function UserPage() {
                         <TableCell align="left">{dateCreate}</TableCell>
 
                         <TableCell align="left">
-                          <Label color={status === 'closed'? 'error': status === 'no open' ? 'warning': 'success'}>{status === 'closed'? 'เสร็จสิ้น': status === 'no open' ? 'รออนุมัติ': 'กำลังดำเนินการ'}</Label>
+                          <Label color={status === 'closed' ? 'error' : status === 'no open' ? 'warning' : 'success'}>{status === 'closed' ? 'เสร็จสิ้น' : status === 'no open' ? 'รออนุมัติ' : 'กำลังดำเนินการ'}</Label>
                         </TableCell>
 
                         <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
+                          <IconButton size="large" color="inherit" onClick={(event) => { handleOpenMenu(event, id, name, requestTitle, requestText, dateCreate, imageURL) }}>
                             <Iconify icon={'eva:more-vertical-fill'} />
                           </IconButton>
                         </TableCell>
@@ -324,17 +495,17 @@ export default function UserPage() {
           },
         }}
       >
-        <MenuItem>
+        <MenuItem onClick={() => { handleDetailClick(selected[0]) }}>
           <Iconify icon={'ph:magnifying-glass-bold'} sx={{ mr: 2 }} />
           ดูรายละเอียด
         </MenuItem>
 
-        <MenuItem>
+        <MenuItem onClick={() => { handleEditClick(selected[0]) }}>
           <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
           แก้ไข
         </MenuItem>
 
-        <MenuItem sx={{ color: 'error.main' }}>
+        <MenuItem sx={{ color: 'error.main' }} onClick={() => { handleDeleteClick(selected[0]) }} >
           <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
           ลบ
         </MenuItem>
